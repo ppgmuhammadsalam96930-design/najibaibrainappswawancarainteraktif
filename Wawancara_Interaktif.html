@@ -7770,88 +7770,11 @@ class SpeechToTextExternalEngine {
         this.injectStyles();
         this.setupGlobalFunctions();
     }
-
-    // Buat UI elements tambahan
-    createUIElements() {
-        // Speech Control Panel
-        this.createSpeechControlPanel();
-        
-        // Real-time Transcript Display
-        this.createTranscriptDisplay();
-        
-        // Audio Visualizer
-        this.createAudioVisualizer();
-    }
-
-    // Buat Speech Control Panel
-    createSpeechControlPanel() {
-        const controlPanel = document.createElement('div');
-        controlPanel.id = 'speechControlPanel';
-        controlPanel.innerHTML = `
-            <div class="speech-control-header">
-                <div class="speech-control-icon">
-                    <i class="fas fa-microphone-alt"></i>
-                </div>
-                <h3>SUPER SPEECH-TO-TEXT ENGINE</h3>
-                <div class="speech-control-badge">
-                    <span class="accuracy-badge">99.9% AKURASI</span>
-                </div>
-            </div>
-            
-            <div class="speech-control-stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="realTimeAccuracy">99.9%</div>
-                    <div class="stat-label">Akurasi Real-time</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="wordCount">0</div>
-                    <div class="stat-label">Kata Terdeteksi</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="noiseLevel">0%</div>
-                    <div class="stat-label">Kebisingan</div>
-                </div>
-            </div>
-
-            <div class="speech-control-actions">
-                <button class="speech-btn speech-btn-primary" id="startSpeechBtn">
-                    <i class="fas fa-microphone"></i>
-                    <span>MULAI DENGARKAN</span>
-                </button>
-                <button class="speech-btn speech-btn-danger" id="stopSpeechBtn" disabled>
-                    <i class="fas fa-stop"></i>
-                    <span>BERHENTI</span>
-                </button>
-                <button class="speech-btn speech-btn-success" id="syncAnswerBtn">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>SYNC KE JAWABAN</span>
-                </button>
-            </div>
-
-            <div class="speech-control-features">
-                <div class="feature-toggle">
-                    <input type="checkbox" id="autoSyncToggle" checked>
-                    <label for="autoSyncToggle">Auto-Sync ke Jawaban</label>
-                </div>
-                <div class="feature-toggle">
-                    <input type="checkbox" id="noiseCancelToggle" checked>
-                    <label for="noiseCancelToggle">Noise Cancellation</label>
-                </div>
-                <div class="feature-toggle">
-                    <input type="checkbox" id="autoPunctuationToggle" checked>
-                    <label for="autoPunctuationToggle">Auto Punctuation</label>
-                </div>
-            </div>
-        `;
-
-        document.body.appendChild(controlPanel);
-
         // Event Listeners
         document.getElementById('startSpeechBtn').addEventListener('click', () => this.startListening());
         document.getElementById('stopSpeechBtn').addEventListener('click', () => this.stopListening());
         document.getElementById('syncAnswerBtn').addEventListener('click', () => this.syncToAnswer());
     }
-
     // Buat Transcript Display
     createTranscriptDisplay() {
         const transcriptPanel = document.createElement('div');
@@ -9055,98 +8978,6 @@ class SpeechReportEngine {
         // Inject styles
         this.injectEnhancementStyles();
     }
-
-    // Show enhanced report modal
-    showEnhancedReportModal() {
-        const modal = document.createElement('div');
-        modal.className = 'enhanced-report-modal';
-        modal.innerHTML = `
-            <div class="enhanced-report-content">
-                <div class="report-header">
-                    <h2>ENHANCED REPORT ANALYTICS</h2>
-                    <button class="close-report" onclick="this.parentElement.parentElement.remove()">×</button>
-                </div>
-                
-                <div class="report-body">
-                    <div class="report-section">
-                        <h3>Speech-to-Text Performance</h3>
-                        <div class="performance-metrics">
-                            <div class="metric">
-                                <span class="metric-label">Accuracy Score</span>
-                                <div class="metric-bar">
-                                    <div class="metric-fill" style="width: 99.7%"></div>
-                                </div>
-                                <span class="metric-value">99.7%</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Response Time</span>
-                                <div class="metric-bar">
-                                    <div class="metric-fill" style="width: 95%"></div>
-                                </div>
-                                <span class="metric-value">0.2s</span>
-                            </div>
-                            <div class="metric">
-                                <span class="metric-label">Noise Reduction</span>
-                                <div class="metric-bar">
-                                    <div class="metric-fill" style="width: 98%"></div>
-                                </div>
-                                <span class="metric-value">98%</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="report-section">
-                        <h3>Interview Analytics</h3>
-                        <div class="analytics-grid">
-                            <div class="analytic-item">
-                                <div class="analytic-icon">📊</div>
-                                <div class="analytic-info">
-                                    <div class="analytic-value">${this.getWordCount()} kata</div>
-                                    <div class="analytic-label">Total Words</div>
-                                </div>
-                            </div>
-                            <div class="analytic-item">
-                                <div class="analytic-icon">⏱️</div>
-                                <div class="analytic-info">
-                                    <div class="analytic-value">${this.getDuration()}</div>
-                                    <div class="analytic-label">Duration</div>
-                                </div>
-                            </div>
-                            <div class="analytic-item">
-                                <div class="analytic-icon">✅</div>
-                                <div class="analytic-info">
-                                    <div class="analytic-value">${this.getAnswerCount()}/10</div>
-                                    <div class="analytic-label">Questions Answered</div>
-                                </div>
-                            </div>
-                            <div class="analytic-item">
-                                <div class="analytic-icon">🎯</div>
-                                <div class="analytic-info">
-                                    <div class="analytic-value">A+</div>
-                                    <div class="analytic-label">Overall Quality</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="report-footer">
-                    <button class="report-btn primary" onclick="speechReportEngine.generateEnhancedPDF()">
-                        <i class="fas fa-download"></i> Download Enhanced Report
-                    </button>
-                    <button class="report-btn" onclick="this.parentElement.parentElement.parentElement.remove()">
-                        <i class="fas fa-times"></i> Close
-                    </button>
-                </div>
-            </div>
-        `;
-
-        document.body.appendChild(modal);
-        
-        // Inject modal styles
-        this.injectModalStyles();
-    }
-
     // Utility methods
     getWordCount() {
         if (!window.InterviewApp || !window.InterviewApp.answers) return 0;
