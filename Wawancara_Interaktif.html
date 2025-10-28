@@ -9,7 +9,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/pyoodide/v0.23.4/full/pyoodide.js"></script>
-    <script src="speech-integration.js"></script>
     <style>
         :root {
             --quantum-primary: #667eea;
@@ -9537,5 +9536,230 @@ if (typeof module !== 'undefined' && module.exports) {
 
 console.log('🔊 Speech-to-Text External Engine Loaded - NAJIB AI BRAIN v6.0');
 </script>
+<script>
+// Unified Speech-to-Text Engine
+class UnifiedSpeechEngine {
+    constructor() {
+        this.config = {
+            language: 'id-ID',
+            continuous: true,
+            interimResults: true,
+            maxAlternatives: 1,
+            enableGoogleSpeech: true,
+            enableAutoTranscribe: true
+        };
+        
+        this.state = {
+            isListening: false,
+            finalTranscript: '',
+            interimTranscript: '',
+            currentEngine: null // 'google' atau 'native'
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            this.recognition = new SpeechRecognition();
+            this.configureRecognition();
+        }
+        
+        this.createUI();
+        this.setupEventListeners();
+    }
+    
+    createUI() {
+        const container = document.querySelector('.voice-recording-container');
+        if (!container) return;
+        
+        container.innerHTML = `
+            <div class="voice-recording-header">
+                <div class="voice-recording-icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <h3>Rekam Jawaban</h3>
+            </div>
+            
+            <div class="recording-controls">
+                <button id="startRecordBtn" class="record-btn primary">
+                    <i class="fas fa-microphone"></i> Mulai Rekam
+                </button>
+                <button id="stopRecordBtn" class="record-btn stop" disabled>
+                    <i class="fas fa-stop"></i> Stop
+                </button>
+            </div>
+            
+            <div class="transcript-container" style="display:none">
+                <div class="transcript-text"></div>
+                <div class="transcript-status"></div>
+            </div>
+            
+            <textarea id="answerInput" class="answer-input" 
+                      placeholder="Jawaban akan muncul di sini..."></textarea>
+        `;
+    }
+    
+    startRecording() {
+        if (this.state.isListening) {
+            this.stopRecording();
+            return;
+        }
+        
+        try {
+            this.recognition.start();
+            this.state.isListening = true;
+            this.updateUI(true);
+            
+            document.querySelector('.transcript-container').style.display = 'block';
+            updateDynamicIsland('🎤 Mendengarkan...', 2000);
+        } catch (error) {
+            console.error('Error starting recording:', error);
+            showCustomAlert('Error', 'Gagal memulai perekaman');
+        }
+    }
+    
+    stopRecording() {
+        if (this.recognition && this.state.isListening) {
+            this.recognition.stop();
+            this.state.isListening = false;
+            this.updateUI(false);
+            
+            // Auto-sync ke textarea
+            const textarea = document.getElementById('answerInput');
+            if (textarea) {
+                textarea.value = this.state.finalTranscript;
+            }
+            
+            updateDynamicIsland('⏹️ Rekaman Selesai', 2000);
+        }
+    }
+    
+    updateUI(isRecording) {
+        const startBtn = document.getElementById('startRecordBtn');
+        const stopBtn = document.getElementById('stopRecordBtn');
+        
+        if (isRecording) {
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            startBtn.innerHTML = '<i class="fas fa-microphone"></i> Merekam...';
+        } else {
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            startBtn.innerHTML = '<i class="fas fa-microphone"></i> Mulai Rekam';
+        }
+    }
+    
+    configureRecognition() {
+        this.recognition.continuous = this.config.continuous;
+        this.recognition.interimResults = this.config.interimResults;
+        this.recognition.lang = this.config.language;
+        this.recognition.maxAlternatives = this.config.maxAlternatives;
+        
+        this.recognition.onresult = (event) => {
+            this.state.interimTranscript = '';
+            
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                
+                if (event.results[i].isFinal) {
+                    this.state.finalTranscript += transcript + ' ';
+                } else {
+                    this.state.interimTranscript += transcript;
+                }
+            }
+            
+            this.updateTranscriptDisplay();
+        };
+        
+        this.recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            this.stopRecording();
+        };
+    }
+    
+    updateTranscriptDisplay() {
+        const transcriptContainer = document.querySelector('.transcript-text');
+        if (transcriptContainer) {
+            transcriptContainer.innerHTML = `
+                <div class="final">${this.state.finalTranscript}</div>
+                <div class="interim">${this.state.interimTranscript}</div>
+            `;
+        }
+    }
+    
+    setupEventListeners() {
+        document.getElementById('startRecordBtn')?.addEventListener('click', 
+            () => this.startRecording());
+        document.getElementById('stopRecordBtn')?.addEventListener('click', 
+            () => this.stopRecording());
+    }
+}
+
+// Inisialisasi
+document.addEventListener('DOMContentLoaded', () => {
+    window.speechEngine = new UnifiedSpeechEngine();
+});
+</script>
+
+<style>
+.voice-recording-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 15px 0;
+}
+
+.record-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.record-btn.primary {
+    background: #fff;
+    color: #333;
+}
+
+.record-btn.stop {
+    background: #ff4757;
+    color: #fff;
+}
+
+.record-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.transcript-container {
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    color: #fff;
+}
+
+.transcript-text .interim {
+    color: rgba(255,255,255,0.7);
+    font-style: italic;
+}
+
+.answer-input {
+    width: 100%;
+    min-height: 100px;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 15px;
+    resize: vertical;
+}
+</style>
 </body>
 </html>
