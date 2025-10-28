@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/pyoodide/v0.23.4/full/pyoodide.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyoodide.js"></script>
+    <script src="speech-integration.js"></script>
     <style>
         :root {
             --quantum-primary: #667eea;
@@ -9515,7 +9516,7 @@ function initializeSpeechEngines() {
         if (window.updateDynamicIsland) {
             window.updateDynamicIsland('🎤 SPEECH ENGINE READY - 99.9% Accuracy', 3000);
         }
-    }, 1000);
+    }, 10);
 }
 
 // Auto-initialize when DOM is ready
@@ -9761,5 +9762,6 @@ document.addEventListener('DOMContentLoaded', () => {
     resize: vertical;
 }
 </style>
+</script>
 </body>
 </html>
