@@ -9040,30 +9040,6 @@ class SpeechReportEngine {
         const enhancements = document.createElement('div');
         enhancements.className = 'speech-report-enhancements';
         enhancements.innerHTML = `
-            <div class="enhancement-section">
-                <h3 style="color: #667eea; margin-bottom: 15px;">
-                    <i class="fas fa-chart-bar"></i> SPEECH-TO-TEXT ANALYTICS
-                </h3>
-                
-                <div class="analytics-grid">
-                    <div class="analytics-card">
-                        <div class="analytics-value">99.7%</div>
-                        <div class="analytics-label">Average Accuracy</div>
-                    </div>
-                    <div class="analytics-card">
-                        <div class="analytics-value">${this.getWordCount()}</div>
-                        <div class="analytics-label">Words Processed</div>
-                    </div>
-                    <div class="analytics-card">
-                        <div class="analytics-value">${this.getAnswerCount()}</div>
-                        <div class="analytics-label">Questions Answered</div>
-                    </div>
-                    <div class="analytics-card">
-                        <div class="analytics-value">A+</div>
-                        <div class="analytics-label">Audio Quality</div>
-                    </div>
-                </div>
-                
                 <div class="enhancement-actions">
                     <button class="enhancement-btn" onclick="speechReportEngine.generateEnhancedPDF()">
                         <i class="fas fa-file-pdf"></i> Export Enhanced PDF
